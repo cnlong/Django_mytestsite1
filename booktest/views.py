@@ -38,3 +38,16 @@ def delete(request, bid):
     # 注意这里的重定向的路径和其原来的视图url路径同级，也就是127.0.0.0/delete8 ==》 127.0.0.1/index
     # 如果原来的URL是127.0.0.0/delete/8,对应重定向的是127.0.0.0/delete/index。这样会找不到首页
     return redirect('/index')
+
+
+def areas(request):
+    """获取扬州市的上级地区和下级地区"""
+    # 1.获取扬州市的信息
+    area = AreaInfo.objects.get(atitle='扬州市')
+    # 2.查询扬州市的上级信息
+    # 多往一查询
+    parent = area.aParent
+    # 3.查询下级信息
+    # 一往多查询
+    child = area.areainfo_set.all()
+    return render(request, 'booktest/areas.html', {'area': area, 'parent': parent, 'child': child})

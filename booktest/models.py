@@ -29,3 +29,30 @@ class HeroInfo(models.Model):
     hbook = models.ForeignKey('BookInof', on_delete=models.CASCADE)
     # 软删除
     isDelete = models.BooleanField(default=False)
+
+
+# # 模型多对多示例,多对多的两个类中，任意在一个类中写对应的关系属性即可
+# # # 新闻类型类
+# # class NewsType(models.Model):
+# #     # 类型名
+# #     type_name = models.CharField(max_length=20)
+# #     # 关系属性，代表信息所属的类型
+# #     type_news = models.ManyToManyField('NewsInfo')
+# #
+# #
+# # # 新闻类
+# # class NewsInfo(models.Model):
+# #     # 新闻标题
+# #     title = models.CharField(max_length=20)
+# #     # 发布时间
+# #     pub_date = models.DateTimeField(auto_now_add=True)
+# #     # 信息内容
+# #     content = models.TextField()
+# #     # # 关系属性，代表信息所属的类型
+# #     # news_type = models.ManyToManyField('NewsType')
+
+class AreaInfo(models.Model):
+    """地区模型类"""
+    atitle = models.CharField(max_length=20)
+    # 关系属性，代表当前地区的父级地区
+    aParent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)   # 代表这个类与他自身有了这种关联
