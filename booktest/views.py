@@ -7,7 +7,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 def index(request):
     """显示图书信息"""
     # 1.查询出所有的图书信息
-    books = BookInof.objects.all()
+    books = BookInfo.objects.all()
     # 2.使用模板
     return render(request, 'booktest/index.html', {'books': books})
 
@@ -15,7 +15,7 @@ def index(request):
 def create(request):
     """新增一本图书"""
     # 1.创建一个BookInfo对象
-    b = BookInof()
+    b = BookInfo()
     b.btitle = '流星蝴蝶剑'
     b.bpub_date = date(1990,1,1)
     # 保存数据
@@ -30,7 +30,7 @@ def create(request):
 def delete(request, bid):
     """删除图书"""
     # 1.通过bid获取图书对象
-    book = BookInof.objects.get(id=bid)
+    book = BookInfo.objects.get(id=bid)
     # 2.删除
     book.delete()
     # 3.重定向到首页

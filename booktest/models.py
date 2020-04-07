@@ -1,8 +1,33 @@
 from django.db import models
 
 # Create your models here.
+class BookInfoManager(models.Manager):
+    """自定义一个BookInfo的模型管理器类，继承自模型管理器类"""
+    # 1.重写其all方法
+    def all(self):
+        # 1.调用父类的all方法，获取所有的数据，返回是是一个QuerySet
+        books = super().all()
+        # 2.对数据进行过滤，加入自己想要的方法
+        books = books.filter(isDelete=False)
+        # 3.返回查询结果
+        return books
 
-class BookInof(models.Model):
+    # 2.添加额外的函数方法，操作模型类对象的数据报（增删改查）
+    def create_book(self, btitle, bpud_date):
+        # 1.创建一个图书对象
+        # book = BookInfo()
+        # 直接通过BookInfo()创建类的时候，存在一个一一对应的关系，如果模型类的名字变了，管理器也需要改变
+        # 所以通过管理器的model方法获取其所对应的模型类的类名，较为方便
+        model_class = self.model
+        book = model_class()
+        book.btitle = btitle
+        book.bpub_date =bpud_date
+        # 2.数据保存
+        book.save()
+        # 3.返回对象
+        return book
+
+class BookInfo(models.Model):
     """图书模型类"""
     # 图书名称
     btitle = models.CharField(max_length=20)
@@ -15,6 +40,8 @@ class BookInof(models.Model):
     # 删除标记，删除数据，不代表真正删除，只是修改删除标记
     # 软删除
     isDelete = models.BooleanField(default=False)
+    # # 自定义一个BookInfoManager类的对象
+    # object = BookInfoManager()
 
 
 class HeroInfo(models.Model):
@@ -26,7 +53,7 @@ class HeroInfo(models.Model):
     # 备注
     hcomment = models.CharField(max_length=200)
     # 外键关联图书,表与表之间关联的时候,必须要写on_delete参数,否则会报异常
-    hbook = models.ForeignKey('BookInof', on_delete=models.CASCADE)
+    hbook = models.ForeignKey('BookInfo', on_delete=models.CASCADE)
     # 软删除
     isDelete = models.BooleanField(default=False)
 
